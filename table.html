@@ -11,13 +11,27 @@
 <body>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script>
-  d3.tsv("unemp_states_us_nov_2013.tsv", function(error, data){
+  d3.text("unemp_states_us_nov_2013.tsv", function(error, data){
+
+      var tsvdata = d3.tsv.parseRows(data);
+      var h_data = tsvdata.shift();
+
+      console.log(h_data);
 
       var table = d3.select("body").append("table"),
+      thead = table.append("thead"),
       tbody = table.append("tbody");
 
+      //Add header
+      var h_tr = thead.selectAll("th")
+      .data(h_data)
+      .enter()
+      .append("th")
+      .text(function(d) { return d; });
+
+      //Add rows
       var rows = tbody.selectAll("tr")
-      .data(data)
+      .data(tsvdata)
       .enter()
       .append("tr");
 
